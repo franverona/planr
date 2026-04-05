@@ -28,6 +28,9 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Mock API runtime database
+db.json
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/

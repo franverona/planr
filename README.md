@@ -36,6 +36,8 @@ npm run dev
 
 This starts both the mock API (`http://localhost:3001`) and the Angular dev server (`http://localhost:4200`) in a single terminal using `concurrently`.
 
+The mock API uses `db.json` as its runtime database (gitignored). On first run it is seeded from `db.seed.json`. To reset to the original seed data, delete `db.json` and restart.
+
 ## Features
 
 | Feature                                                      | Route                   |
