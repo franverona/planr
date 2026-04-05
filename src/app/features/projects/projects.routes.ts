@@ -4,11 +4,11 @@ export const PROJECTS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./components/projects-list.component').then(m => m.ProjectsListComponent),
+      import('./components/projects-list.component').then((m) => m.ProjectsListComponent),
   },
   {
     path: ':id',
     loadComponent: () =>
-      import('./components/project-detail.component').then(m => m.ProjectDetailComponent),
+      import('./components/project-detail.component').then((m) => m.ProjectDetailComponent),
   },
 ]

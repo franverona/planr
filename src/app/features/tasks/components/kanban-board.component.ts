@@ -122,9 +122,9 @@ export class KanbanBoardComponent {
   readonly tasksByStatus = computed<Record<TaskStatus, Task[]>>(() => {
     const source = this.localTasks().length > 0 ? this.localTasks() : this.tasks()
     return {
-      todo: source.filter(t => t.status === 'todo'),
-      'in-progress': source.filter(t => t.status === 'in-progress'),
-      done: source.filter(t => t.status === 'done'),
+      todo: source.filter((t) => t.status === 'todo'),
+      'in-progress': source.filter((t) => t.status === 'in-progress'),
+      done: source.filter((t) => t.status === 'done'),
     }
   })
 
@@ -140,7 +140,7 @@ export class KanbanBoardComponent {
     const allTasks = this.getEffectiveTasks()
 
     // Optimistic update
-    this.localTasks.set(allTasks.map(t => (t.id === movedTask.id ? updatedTask : t)))
+    this.localTasks.set(allTasks.map((t) => (t.id === movedTask.id ? updatedTask : t)))
 
     this.tasksService
       .update(movedTask.id, { status: targetStatus })
@@ -177,7 +177,7 @@ export class KanbanBoardComponent {
         .subscribe({
           next: (updated: Task) => {
             const base = this.getEffectiveTasks()
-            this.localTasks.set(base.map(t => (t.id === updated.id ? updated : t)))
+            this.localTasks.set(base.map((t) => (t.id === updated.id ? updated : t)))
             this.closeForm()
           },
         })
@@ -200,7 +200,7 @@ export class KanbanBoardComponent {
 
   onDeleteTask(taskId: number): void {
     const base = this.getEffectiveTasks()
-    this.localTasks.set(base.filter(t => t.id !== taskId))
+    this.localTasks.set(base.filter((t) => t.id !== taskId))
 
     this.tasksService
       .delete(taskId)

@@ -8,7 +8,8 @@ export const routes: Routes = [
   },
   {
     path: 'projects',
-    loadChildren: () => import('./features/projects/projects.routes').then(m => m.PROJECTS_ROUTES),
+    loadChildren: () =>
+      import('./features/projects/projects.routes').then((m) => m.PROJECTS_ROUTES),
   },
   {
     path: '**',
