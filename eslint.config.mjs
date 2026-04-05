@@ -9,6 +9,7 @@ export default [
     files: ['**/*.ts'],
     processor: angular.processInlineTemplates,
     rules: {
+      'no-undef': 'off',
       '@angular-eslint/directive-selector': [
         'error',
         { type: 'attribute', prefix: 'app', style: 'camelCase' },
@@ -19,7 +20,8 @@ export default [
       ],
     },
   },
-  ...angular.configs.templateRecommended,
-  ...angular.configs.templateAccessibility,
+  ...[...angular.configs.templateRecommended, ...angular.configs.templateAccessibility].map(
+    (config) => ({ ...config, files: ['**/*.html'] }),
+  ),
   prettierConfig,
 ]
