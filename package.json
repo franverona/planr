@@ -10,6 +10,7 @@
     "test": "ng test",
     "dev": "concurrently -n \"api,ng\" -c \"yellow,cyan\" \"npm run mock-api\" \"npm run start\"",
     "mock-api": "cp -n db.seed.json db.json && json-server db.json --port 3001",
+    "reset-db": "cp db.seed.json db.json",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "format": "prettier --write .",
