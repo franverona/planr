@@ -1,0 +1,99 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "Website Redesign",
+      "description": "Complete overhaul of the company marketing website with a modern look and improved UX.",
+      "status": "active",
+      "createdAt": "2026-01-10T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Mobile App MVP",
+      "description": "Build the initial version of the iOS/Android app for our core user base.",
+      "status": "active",
+      "createdAt": "2026-02-01T10:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Backend API v2",
+      "description": "Migrate legacy REST endpoints to a new GraphQL API with improved performance.",
+      "status": "archived",
+      "createdAt": "2025-11-15T08:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "projectId": 1,
+      "title": "Design new homepage mockups",
+      "description": "Create Figma mockups for the redesigned homepage including hero, features, and footer sections.",
+      "status": "done",
+      "priority": "high",
+      "createdAt": "2026-01-11T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "projectId": 1,
+      "title": "Implement responsive navigation",
+      "description": "Build the top navigation bar with mobile hamburger menu using Tailwind CSS.",
+      "status": "in-progress",
+      "priority": "high",
+      "createdAt": "2026-01-15T10:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "projectId": 1,
+      "title": "Set up analytics tracking",
+      "description": "Integrate Google Analytics 4 and configure conversion events.",
+      "status": "todo",
+      "priority": "medium",
+      "createdAt": "2026-01-20T11:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "projectId": 1,
+      "title": "Write SEO meta tags",
+      "description": "Add proper Open Graph and Twitter card meta tags to all pages.",
+      "status": "todo",
+      "priority": "low",
+      "createdAt": "2026-01-21T09:30:00.000Z"
+    },
+    {
+      "id": 5,
+      "projectId": 2,
+      "title": "Define API contracts",
+      "description": "Document all REST endpoints the mobile app will consume using OpenAPI spec.",
+      "status": "done",
+      "priority": "high",
+      "createdAt": "2026-02-02T09:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "projectId": 2,
+      "title": "Implement user authentication",
+      "description": "Build login, registration, and password reset flows with JWT tokens.",
+      "status": "in-progress",
+      "priority": "high",
+      "createdAt": "2026-02-05T10:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "projectId": 2,
+      "title": "Create onboarding screens",
+      "description": "Design and implement the 3-step onboarding flow for new users.",
+      "status": "todo",
+      "priority": "medium",
+      "createdAt": "2026-02-10T11:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "projectId": 3,
+      "title": "Audit existing REST endpoints",
+      "description": "Document all v1 endpoints, their consumers, and migration complexity.",
+      "status": "done",
+      "priority": "medium",
+      "createdAt": "2025-11-16T09:00:00.000Z"
+    }
+  ]
+}
