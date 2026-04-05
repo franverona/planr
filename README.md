@@ -21,6 +21,7 @@ A project management tool featuring kanban boards to organise and track tasks ac
 
 | Script             | Description                                     |
 | ------------------ | ----------------------------------------------- |
+| `npm run dev`      | Start API + dev server together (recommended)   |
 | `npm start`        | Dev server at `http://localhost:4200`           |
 | `npm run mock-api` | json-server mock API at `http://localhost:3001` |
 | `npm run build`    | Production build to `dist/planr/`               |
@@ -29,23 +30,11 @@ A project management tool featuring kanban boards to organise and track tasks ac
 
 ## Getting Started
 
-You need two processes running in parallel. Open two terminals:
-
-**Terminal 1 — Mock API:**
-
 ```bash
-npm run mock-api
+npm run dev
 ```
 
-This starts json-server at `http://localhost:3001` with seed data from `db.json`.
-
-**Terminal 2 — Angular dev server:**
-
-```bash
-npm start
-```
-
-Opens the app at `http://localhost:4200`.
+This starts both the mock API (`http://localhost:3001`) and the Angular dev server (`http://localhost:4200`) in a single terminal using `concurrently`.
 
 ## Features
 
