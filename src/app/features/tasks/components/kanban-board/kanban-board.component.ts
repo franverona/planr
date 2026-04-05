@@ -2,10 +2,10 @@ import { Component, inject, input, signal, computed, DestroyRef } from '@angular
 import { CommonModule } from '@angular/common'
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { TasksService } from '../../../core/services/tasks.service'
-import { Task, TaskStatus, CreateTaskDto, UpdateTaskDto } from '../../../core/models/task.model'
-import { TaskCardComponent } from './task-card.component'
-import { TaskFormComponent } from './task-form.component'
+import { TasksService } from '../../../../core/services/tasks.service'
+import { Task, TaskStatus, CreateTaskDto, UpdateTaskDto } from '../../../../core/models/task.model'
+import { TaskCardComponent } from '../task-card/task-card.component'
+import { TaskFormComponent } from '../task-form/task-form.component'
 
 interface KanbanColumn {
   id: TaskStatus
@@ -18,81 +18,7 @@ interface KanbanColumn {
   selector: 'app-kanban-board',
   standalone: true,
   imports: [CommonModule, DragDropModule, TaskCardComponent, TaskFormComponent],
-  template: `
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      @for (col of columns; track col.id) {
-        <div class="flex flex-col min-h-0">
-          <!-- Column header -->
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span [class]="col.colorClass" class="w-2.5 h-2.5 rounded-full"></span>
-              <h3 class="text-sm font-semibold text-gray-700">{{ col.label }}</h3>
-              <span class="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
-                {{ tasksByStatus()[col.id].length }}
-              </span>
-            </div>
-            <button
-              (click)="openCreateForm(col.id)"
-              class="text-gray-400 hover:text-primary-600 transition-colors p-1 rounded"
-              title="Add task"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Drop zone -->
-          <div
-            cdkDropList
-            [id]="col.id"
-            [cdkDropListData]="tasksByStatus()[col.id]"
-            [cdkDropListConnectedTo]="connectedLists"
-            (cdkDropListDropped)="onDrop($event, col.id)"
-            [class]="col.headerClass"
-            class="flex-1 min-h-24 rounded-xl p-2 space-y-2 transition-colors"
-          >
-            @for (task of tasksByStatus()[col.id]; track task.id) {
-              <div cdkDrag>
-                <app-task-card
-                  [task]="task"
-                  (deleted)="onDeleteTask($event)"
-                  (edited)="openEditForm($event)"
-                />
-                <div
-                  *cdkDragPlaceholder
-                  class="h-20 rounded-lg bg-gray-200 border-2 border-dashed border-gray-300"
-                ></div>
-              </div>
-            }
-
-            @if (tasksByStatus()[col.id].length === 0) {
-              <div class="text-center py-6 text-xs text-gray-400">Drop tasks here</div>
-            }
-          </div>
-        </div>
-      }
-    </div>
-
-    <!-- Task form modal -->
-    @if (showForm()) {
-      <app-task-form
-        [task]="editingTask()"
-        [defaultStatus]="formDefaultStatus()"
-        (saved)="onTaskSaved($event)"
-        (cancelled)="closeForm()"
-      />
-    }
-  `,
+  templateUrl: './kanban-board.component.html',
 })
 export class KanbanBoardComponent {
   private readonly tasksService = inject(TasksService)
