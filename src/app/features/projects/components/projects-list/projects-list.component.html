@@ -123,9 +123,5 @@
 
 <!-- Create form modal -->
 @if (showForm()) {
-  <app-project-form
-    [project]="null"
-    (saved)="onProjectSaved($event)"
-    (cancelled)="closeForm()"
-  />
+  <app-project-form [project]="null" (saved)="onProjectSaved($event)" (cancelled)="closeForm()" />
 }

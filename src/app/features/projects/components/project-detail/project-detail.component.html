@@ -31,10 +31,7 @@
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-2">
             <h1 class="text-2xl font-bold text-gray-900">{{ project()!.name }}</h1>
-            <span
-              [class]="statusBadgeClass()"
-              class="text-xs font-medium px-2.5 py-1 rounded-full"
-            >
+            <span [class]="statusBadgeClass()" class="text-xs font-medium px-2.5 py-1 rounded-full">
               {{ project()!.status }}
             </span>
           </div>
@@ -94,10 +91,7 @@
   @if (!loading() && !project()) {
     <div class="text-center py-16">
       <p class="text-gray-500">Project not found.</p>
-      <a
-        routerLink="/projects"
-        class="mt-4 inline-block text-primary-600 hover:underline text-sm"
-      >
+      <a routerLink="/projects" class="mt-4 inline-block text-primary-600 hover:underline text-sm">
         Back to projects
       </a>
     </div>
