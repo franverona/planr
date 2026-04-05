@@ -4,6 +4,5 @@
   "printWidth": 100,
   "semi": false,
   "bracketSpacing": true,
-  "arrowParens": "avoid",
   "endOfLine": "lf"
 }

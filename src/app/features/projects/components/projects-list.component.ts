@@ -174,7 +174,7 @@ export class ProjectsListComponent implements OnInit {
     const filter = this.activeFilter()
     const all = this.projects()
     if (filter === 'all') return all
-    return all.filter(p => p.status === filter)
+    return all.filter((p) => p.status === filter)
   })
 
   ngOnInit(): void {
@@ -197,13 +197,13 @@ export class ProjectsListComponent implements OnInit {
   }
 
   private loadTaskCounts(projects: Project[]): void {
-    projects.forEach(project => {
+    projects.forEach((project) => {
       this.tasksService
         .getByProjectId(project.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (tasks: Task[]) => {
-            this.taskCounts.update(counts => ({ ...counts, [project.id]: tasks.length }))
+            this.taskCounts.update((counts) => ({ ...counts, [project.id]: tasks.length }))
           },
         })
     })
@@ -227,7 +227,7 @@ export class ProjectsListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (created: Project) => {
-          this.projects.update(list => [created, ...list])
+          this.projects.update((list) => [created, ...list])
           this.closeForm()
         },
       })

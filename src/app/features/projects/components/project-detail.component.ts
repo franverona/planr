@@ -145,7 +145,7 @@ export class ProjectDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
-        switchMap(params => {
+        switchMap((params) => {
           const id = Number(params.get('id'))
           this.loading.set(true)
           return this.projectsService.getById(id)
