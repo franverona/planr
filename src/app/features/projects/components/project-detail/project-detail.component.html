@@ -103,5 +103,6 @@
     [project]="project()"
     (saved)="onProjectSaved($event)"
     (cancelled)="showEditForm.set(false)"
+    [loading]="isSubmitting()"
   />
 }

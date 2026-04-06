@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { switchMap } from 'rxjs'
+import { finalize, switchMap } from 'rxjs'
 import { ProjectsService } from '../../../../core/services/projects.service'
 import { TasksService } from '../../../../core/services/tasks.service'
 import { Project, UpdateProjectDto } from '../../../../core/models/project.model'
@@ -27,6 +27,7 @@ export class ProjectDetailComponent implements OnInit {
   readonly tasks = signal<Task[]>([])
   readonly loading = signal(true)
   readonly showEditForm = signal(false)
+  readonly isSubmitting = signal(false)
 
   ngOnInit(): void {
     this.route.paramMap
@@ -67,9 +68,13 @@ export class ProjectDetailComponent implements OnInit {
     const p = this.project()
     if (!p) return
 
+    this.isSubmitting.set(true)
     this.projectsService
       .update(p.id, dto)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isSubmitting.set(false)),
+      )
       .subscribe({
         next: (updated: Project) => {
           this.project.set(updated)

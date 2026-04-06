@@ -8,11 +8,12 @@ import {
   TaskStatus,
   TaskPriority,
 } from '../../../../core/models/task.model'
+import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './task-form.component.html',
 })
 export class TaskFormComponent implements OnInit {
@@ -22,6 +23,7 @@ export class TaskFormComponent implements OnInit {
   readonly defaultStatus = input<TaskStatus>('todo')
   readonly saved = output<CreateTaskDto | UpdateTaskDto>()
   readonly cancelled = output<void>()
+  readonly loading = input(false)
 
   form = this.fb.nonNullable.group({
     title: ['', Validators.required],
