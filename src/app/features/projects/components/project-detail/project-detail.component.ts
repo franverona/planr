@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { finalize, switchMap } from 'rxjs'
+import { Observable, finalize, forkJoin, of, switchMap } from 'rxjs'
 import { ProjectsService } from '../../../../core/services/projects.service'
 import { TasksService } from '../../../../core/services/tasks.service'
 import { Project, UpdateProjectDto } from '../../../../core/models/project.model'
@@ -87,9 +87,14 @@ export class ProjectDetailComponent implements OnInit {
     const p = this.project()
     if (!p || !confirm(`Delete project "${p.name}"? This cannot be undone.`)) return
 
-    this.projectsService
-      .delete(p.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    const taskDeletes = this.tasks().map((task) => this.tasksService.delete(task.id))
+    const tasks$: Observable<unknown> = taskDeletes.length ? forkJoin(taskDeletes) : of(null)
+
+    tasks$
+      .pipe(
+        switchMap(() => this.projectsService.delete(p.id)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: () => this.router.navigate(['/projects']),
       })
