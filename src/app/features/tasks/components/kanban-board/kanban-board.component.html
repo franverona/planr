@@ -69,5 +69,6 @@
     [defaultStatus]="formDefaultStatus()"
     (saved)="onTaskSaved($event)"
     (cancelled)="closeForm()"
+    [loading]="isSubmitting()"
   />
 }

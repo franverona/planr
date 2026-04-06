@@ -12,7 +12,7 @@ import {
 } from '../../../../core/models/project.model'
 import { Task } from '../../../../core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
-import { forkJoin } from 'rxjs'
+import { finalize, forkJoin } from 'rxjs'
 
 type FilterStatus = 'all' | ProjectStatus
 
@@ -32,6 +32,7 @@ export class ProjectsListComponent implements OnInit {
   readonly loading = signal(true)
   readonly activeFilter = signal<FilterStatus>('all')
   readonly showForm = signal(false)
+  readonly isSubmitting = signal(false)
 
   readonly filters: { label: string; value: FilterStatus }[] = [
     { label: 'All', value: 'all' },
@@ -96,9 +97,13 @@ export class ProjectsListComponent implements OnInit {
   }
 
   onProjectSaved(dto: CreateProjectDto | UpdateProjectDto): void {
+    this.isSubmitting.set(true)
     this.projectsService
       .create(dto as CreateProjectDto)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isSubmitting.set(false)),
+      )
       .subscribe({
         next: (created: Project) => {
           this.projects.update((list) => [created, ...list])
