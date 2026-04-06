@@ -10,7 +10,7 @@ import { Task, TaskPriority } from '../../../../core/models/task.model'
 })
 export class TaskCardComponent {
   readonly task = input.required<Task>()
-  readonly deleted = output<number>()
+  readonly deleted = output<string>()
   readonly edited = output<Task>()
 
   priorityBadgeClass(priority: TaskPriority): string {

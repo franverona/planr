@@ -33,7 +33,7 @@ export class ProjectDetailComponent implements OnInit {
     this.route.paramMap
       .pipe(
         switchMap((params) => {
-          const id = Number(params.get('id'))
+          const id = params.get('id')!
           this.loading.set(true)
           return this.projectsService.getById(id)
         }),
@@ -49,7 +49,7 @@ export class ProjectDetailComponent implements OnInit {
       })
   }
 
-  private loadTasks(projectId: number): void {
+  private loadTasks(projectId: string): void {
     this.tasksService
       .getByProjectId(projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))

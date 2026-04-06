@@ -25,7 +25,7 @@ export class KanbanBoardComponent {
   private readonly tasksService = inject(TasksService)
   private readonly destroyRef = inject(DestroyRef)
 
-  readonly projectId = input.required<number>()
+  readonly projectId = input.required<string>()
   readonly tasks = input.required<Task[]>()
 
   readonly localTasks = signal<Task[]>([])
@@ -133,7 +133,7 @@ export class KanbanBoardComponent {
     }
   }
 
-  onDeleteTask(taskId: number): void {
+  onDeleteTask(taskId: string): void {
     const base = this.getEffectiveTasks()
     this.localTasks.set(base.filter((t) => t.id !== taskId))
 

@@ -12,7 +12,7 @@ export class ProjectsService {
     return this.http.get<Project[]>(this.apiUrl)
   }
 
-  getById(id: number): Observable<Project> {
+  getById(id: string): Observable<Project> {
     return this.http.get<Project>(`${this.apiUrl}/${id}`)
   }
 
@@ -24,11 +24,11 @@ export class ProjectsService {
     return this.http.post<Project>(this.apiUrl, payload)
   }
 
-  update(id: number, dto: UpdateProjectDto): Observable<Project> {
+  update(id: string, dto: UpdateProjectDto): Observable<Project> {
     return this.http.patch<Project>(`${this.apiUrl}/${id}`, dto)
   }
 
-  delete(id: number): Observable<void> {
+  delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 }
