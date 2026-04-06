@@ -12,6 +12,7 @@ import {
 } from '../../../../core/models/project.model'
 import { Task } from '../../../../core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
+import { forkJoin } from 'rxjs'
 
 type FilterStatus = 'all' | ProjectStatus
 
@@ -65,16 +66,21 @@ export class ProjectsListComponent implements OnInit {
   }
 
   private loadTaskCounts(projects: Project[]): void {
-    projects.forEach((project) => {
-      this.tasksService
-        .getByProjectId(project.id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (tasks: Task[]) => {
-            this.taskCounts.update((counts) => ({ ...counts, [project.id]: tasks.length }))
-          },
-        })
-    })
+    if (!projects.length) return
+
+    const requests = projects.map((project) => this.tasksService.getByProjectId(project.id))
+
+    forkJoin(requests)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (results: Task[][]) => {
+          const counts: Record<number, number> = {}
+          results.forEach((tasks, i) => {
+            counts[projects[i].id] = tasks.length
+          })
+          this.taskCounts.set(counts)
+        },
+      })
   }
 
   setFilter(filter: FilterStatus): void {
