@@ -2,8 +2,8 @@ export type TaskStatus = 'todo' | 'in-progress' | 'done'
 export type TaskPriority = 'low' | 'medium' | 'high'
 
 export interface Task {
-  id: number
-  projectId: number
+  id: string
+  projectId: string
   title: string
   description: string
   status: TaskStatus
@@ -12,7 +12,7 @@ export interface Task {
 }
 
 export interface CreateTaskDto {
-  projectId: number
+  projectId: string
   title: string
   description: string
   status: TaskStatus

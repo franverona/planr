@@ -4,5 +4,7 @@
   "printWidth": 100,
   "semi": false,
   "bracketSpacing": true,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleAttributePerLine": false
 }

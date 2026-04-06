@@ -12,6 +12,7 @@ import {
 } from '../../../../core/models/project.model'
 import { Task } from '../../../../core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
+import { finalize, forkJoin } from 'rxjs'
 
 type FilterStatus = 'all' | ProjectStatus
 
@@ -27,10 +28,11 @@ export class ProjectsListComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef)
 
   readonly projects = signal<Project[]>([])
-  readonly taskCounts = signal<Record<number, number>>({})
+  readonly taskCounts = signal<Record<string, number>>({})
   readonly loading = signal(true)
   readonly activeFilter = signal<FilterStatus>('all')
   readonly showForm = signal(false)
+  readonly isSubmitting = signal(false)
 
   readonly filters: { label: string; value: FilterStatus }[] = [
     { label: 'All', value: 'all' },
@@ -65,16 +67,21 @@ export class ProjectsListComponent implements OnInit {
   }
 
   private loadTaskCounts(projects: Project[]): void {
-    projects.forEach((project) => {
-      this.tasksService
-        .getByProjectId(project.id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (tasks: Task[]) => {
-            this.taskCounts.update((counts) => ({ ...counts, [project.id]: tasks.length }))
-          },
-        })
-    })
+    if (!projects.length) return
+
+    const requests = projects.map((project) => this.tasksService.getByProjectId(project.id))
+
+    forkJoin(requests)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (results: Task[][]) => {
+          const counts: Record<string, number> = {}
+          results.forEach((tasks, i) => {
+            counts[projects[i].id] = tasks.length
+          })
+          this.taskCounts.set(counts)
+        },
+      })
   }
 
   setFilter(filter: FilterStatus): void {
@@ -90,9 +97,13 @@ export class ProjectsListComponent implements OnInit {
   }
 
   onProjectSaved(dto: CreateProjectDto | UpdateProjectDto): void {
+    this.isSubmitting.set(true)
     this.projectsService
       .create(dto as CreateProjectDto)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isSubmitting.set(false)),
+      )
       .subscribe({
         next: (created: Project) => {
           this.projects.update((list) => [created, ...list])

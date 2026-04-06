@@ -6,6 +6,7 @@ import { TasksService } from '../../../../core/services/tasks.service'
 import { Task, TaskStatus, CreateTaskDto, UpdateTaskDto } from '../../../../core/models/task.model'
 import { TaskCardComponent } from '../task-card/task-card.component'
 import { TaskFormComponent } from '../task-form/task-form.component'
+import { finalize } from 'rxjs'
 
 interface KanbanColumn {
   id: TaskStatus
@@ -24,13 +25,14 @@ export class KanbanBoardComponent {
   private readonly tasksService = inject(TasksService)
   private readonly destroyRef = inject(DestroyRef)
 
-  readonly projectId = input.required<number>()
+  readonly projectId = input.required<string>()
   readonly tasks = input.required<Task[]>()
 
   readonly localTasks = signal<Task[]>([])
   readonly showForm = signal(false)
   readonly editingTask = signal<Task | null>(null)
   readonly formDefaultStatus = signal<TaskStatus>('todo')
+  readonly isSubmitting = signal(false)
 
   readonly columns: KanbanColumn[] = [
     { id: 'todo', label: 'To Do', colorClass: 'bg-gray-400', headerClass: 'bg-gray-50' },
@@ -95,11 +97,15 @@ export class KanbanBoardComponent {
 
   onTaskSaved(dto: CreateTaskDto | UpdateTaskDto): void {
     const existing = this.editingTask()
+    this.isSubmitting.set(true)
 
     if (existing) {
       this.tasksService
         .update(existing.id, dto as UpdateTaskDto)
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => this.isSubmitting.set(false)),
+        )
         .subscribe({
           next: (updated: Task) => {
             const base = this.getEffectiveTasks()
@@ -114,7 +120,10 @@ export class KanbanBoardComponent {
       }
       this.tasksService
         .create(createDto)
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => this.isSubmitting.set(false)),
+        )
         .subscribe({
           next: (created: Task) => {
             this.localTasks.set([...this.getEffectiveTasks(), created])
@@ -124,7 +133,7 @@ export class KanbanBoardComponent {
     }
   }
 
-  onDeleteTask(taskId: number): void {
+  onDeleteTask(taskId: string): void {
     const base = this.getEffectiveTasks()
     this.localTasks.set(base.filter((t) => t.id !== taskId))
 

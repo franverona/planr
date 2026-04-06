@@ -24,6 +24,7 @@ A project management tool featuring kanban boards to organise and track tasks ac
 | `npm run dev`      | Start API + dev server together (recommended)   |
 | `npm start`        | Dev server at `http://localhost:4200`           |
 | `npm run mock-api` | json-server mock API at `http://localhost:3001` |
+| `npm run reset-db` | Reset `db.json` to the original seed data       |
 | `npm run build`    | Production build to `dist/planr/`               |
 | `npm run watch`    | Build in watch mode (development)               |
 | `npm test`         | Run unit tests with Karma/Jasmine               |
@@ -36,41 +37,7 @@ npm run dev
 
 This starts both the mock API (`http://localhost:3001`) and the Angular dev server (`http://localhost:4200`) in a single terminal using `concurrently`.
 
-The mock API uses `db.json` as its runtime database (gitignored). On first run it is seeded from `db.seed.json`. To reset to the original seed data, delete `db.json` and restart.
-
-## Features
-
-| Feature                                                      | Route                   |
-| ------------------------------------------------------------ | ----------------------- |
-| Projects list                                                | `/projects`             |
-| Create / edit / delete projects                              | `/projects` (modal)     |
-| Project detail + kanban board                                | `/projects/:id`         |
-| Drag tasks between columns (`todo` → `in-progress` → `done`) | `/projects/:id`         |
-| Create / edit / delete tasks                                 | `/projects/:id` (modal) |
-| Task priority levels (`low`, `medium`, `high`)               | `/projects/:id`         |
-| Project status (`active` / `archived`)                       | `/projects`             |
-| HTTP error banner                                            | Global (top of page)    |
-
-## Project Structure
-
-```
-src/app/
-├── core/
-│   ├── interceptors/   # HTTP error interceptor
-│   ├── models/         # Project & Task interfaces
-│   └── services/       # ProjectsService, TasksService, NotificationService
-├── features/
-│   ├── projects/       # Lazy-loaded: list + detail
-│   └── tasks/          # Kanban board + task form/card
-└── shared/
-    └── components/     # Navbar, ErrorBanner
-```
-
-## Data Models
-
-**Project** — `id`, `name`, `description`, `status` (`active` | `archived`), `createdAt`
-
-**Task** — `id`, `projectId`, `title`, `description`, `status` (`todo` | `in-progress` | `done`), `priority` (`low` | `medium` | `high`), `createdAt`
+The mock API uses `db.json` as its runtime database (gitignored). On first run it is seeded from `db.seed.json`. To reset to the original seed data, run `npm run reset-db`.
 
 ## Build
 

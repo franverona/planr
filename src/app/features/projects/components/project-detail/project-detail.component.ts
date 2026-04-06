@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { switchMap } from 'rxjs'
+import { Observable, finalize, forkJoin, of, switchMap } from 'rxjs'
 import { ProjectsService } from '../../../../core/services/projects.service'
 import { TasksService } from '../../../../core/services/tasks.service'
 import { Project, UpdateProjectDto } from '../../../../core/models/project.model'
@@ -27,12 +27,13 @@ export class ProjectDetailComponent implements OnInit {
   readonly tasks = signal<Task[]>([])
   readonly loading = signal(true)
   readonly showEditForm = signal(false)
+  readonly isSubmitting = signal(false)
 
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
         switchMap((params) => {
-          const id = Number(params.get('id'))
+          const id = params.get('id')!
           this.loading.set(true)
           return this.projectsService.getById(id)
         }),
@@ -48,7 +49,7 @@ export class ProjectDetailComponent implements OnInit {
       })
   }
 
-  private loadTasks(projectId: number): void {
+  private loadTasks(projectId: string): void {
     this.tasksService
       .getByProjectId(projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -67,9 +68,13 @@ export class ProjectDetailComponent implements OnInit {
     const p = this.project()
     if (!p) return
 
+    this.isSubmitting.set(true)
     this.projectsService
       .update(p.id, dto)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isSubmitting.set(false)),
+      )
       .subscribe({
         next: (updated: Project) => {
           this.project.set(updated)
@@ -82,9 +87,14 @@ export class ProjectDetailComponent implements OnInit {
     const p = this.project()
     if (!p || !confirm(`Delete project "${p.name}"? This cannot be undone.`)) return
 
-    this.projectsService
-      .delete(p.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    const taskDeletes = this.tasks().map((task) => this.tasksService.delete(task.id))
+    const tasks$: Observable<unknown> = taskDeletes.length ? forkJoin(taskDeletes) : of(null)
+
+    tasks$
+      .pipe(
+        switchMap(() => this.projectsService.delete(p.id)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: () => this.router.navigate(['/projects']),
       })
