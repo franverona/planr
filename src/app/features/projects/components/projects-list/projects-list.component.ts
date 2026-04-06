@@ -28,7 +28,7 @@ export class ProjectsListComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef)
 
   readonly projects = signal<Project[]>([])
-  readonly taskCounts = signal<Record<number, number>>({})
+  readonly taskCounts = signal<Record<string, number>>({})
   readonly loading = signal(true)
   readonly activeFilter = signal<FilterStatus>('all')
   readonly showForm = signal(false)
@@ -75,7 +75,7 @@ export class ProjectsListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (results: Task[][]) => {
-          const counts: Record<number, number> = {}
+          const counts: Record<string, number> = {}
           results.forEach((tasks, i) => {
             counts[projects[i].id] = tasks.length
           })
