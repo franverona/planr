@@ -12,7 +12,7 @@ A project management tool featuring kanban boards to organise and track tasks ac
 
 ## Tech Stack
 
-- **Angular 18** — standalone components, signals, reactive forms
+- **Angular 21** — standalone components, signals, reactive forms
 - **Tailwind CSS v3** — utility-first styling with a custom indigo primary ramp
 - **@angular/cdk/drag-drop** — drag-and-drop kanban columns
 - **json-server** — mock REST API on port 3001

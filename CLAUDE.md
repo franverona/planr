@@ -11,6 +11,14 @@
 
 `skipTests: true` is set globally in `angular.json` schematics. Do not generate or create test files unless explicitly asked.
 
+When writing tests, follow the conventions already established in the codebase:
+
+- **Framework**: Karma + Jasmine (run with `npm test`)
+- **Services**: use `TestBed` + `provideHttpClient()` + `provideHttpClientTesting()` and `HttpTestingController`
+- **Components**: use `TestBed.configureTestingModule({ imports: [TheComponent] })`, set required signal inputs via `fixture.componentRef.setInput()`
+- **Mocking**: `jasmine.createSpyObj` for service dependencies; return observables with `of()` or `throwError()`
+- **Jasmine types** are available globally via `tsconfig.json` — no import needed for `describe`, `it`, `expect`, etc.
+
 ## Commits
 
 Conventional commits are enforced via commitlint. Use `feat:`, `fix:`, `chore:`, etc.
