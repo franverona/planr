@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core'
-import { NotificationService, ToastType } from '../../../core/services/notification.service'
+import { NotificationService, ToastType } from '@core/services/notification.service'
 
 @Component({
   selector: 'app-toast',

@@ -7,8 +7,8 @@ import {
   UpdateTaskDto,
   TaskStatus,
   TaskPriority,
-} from '../../../../core/models/task.model'
-import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
+} from '@core/models/task.model'
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component'
 
 @Component({
   selector: 'app-task-form',

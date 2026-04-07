@@ -1,8 +1,8 @@
 import { Component, inject, input, output, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms'
-import { Project, CreateProjectDto, UpdateProjectDto } from '../../../../core/models/project.model'
-import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
+import { Project, CreateProjectDto, UpdateProjectDto } from '@core/models/project.model'
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component'
 
 @Component({
   selector: 'app-project-form',
