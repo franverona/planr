@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { TasksService } from '../../../../core/services/tasks.service'
+import { NotificationService } from '../../../../core/services/notification.service'
 import { Task, TaskStatus, CreateTaskDto, UpdateTaskDto } from '../../../../core/models/task.model'
 import { TaskCardComponent } from '../task-card/task-card.component'
 import { TaskFormComponent } from '../task-form/task-form.component'
@@ -23,6 +24,7 @@ interface KanbanColumn {
 })
 export class KanbanBoardComponent {
   private readonly tasksService = inject(TasksService)
+  private readonly notifications = inject(NotificationService)
   private readonly destroyRef = inject(DestroyRef)
 
   readonly projectId = input.required<string>()
@@ -127,6 +129,7 @@ export class KanbanBoardComponent {
         .subscribe({
           next: (created: Task) => {
             this.localTasks.set([...this.getEffectiveTasks(), created])
+            this.notifications.showToast('Task created', 'success')
             this.closeForm()
           },
         })
@@ -141,6 +144,7 @@ export class KanbanBoardComponent {
       .delete(taskId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
+        next: () => this.notifications.showToast('Task deleted', 'success'),
         error: () => this.localTasks.set(base),
       })
   }

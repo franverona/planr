@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Observable, finalize, forkJoin, of, switchMap } from 'rxjs'
 import { ProjectsService } from '../../../../core/services/projects.service'
 import { TasksService } from '../../../../core/services/tasks.service'
+import { NotificationService } from '../../../../core/services/notification.service'
 import { Project, UpdateProjectDto } from '../../../../core/models/project.model'
 import { Task } from '../../../../core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
@@ -21,6 +22,7 @@ export class ProjectDetailComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly projectsService = inject(ProjectsService)
   private readonly tasksService = inject(TasksService)
+  private readonly notifications = inject(NotificationService)
   private readonly destroyRef = inject(DestroyRef)
 
   readonly project = signal<Project | null>(null)
@@ -96,7 +98,10 @@ export class ProjectDetailComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: () => this.router.navigate(['/projects']),
+        next: () => {
+          this.notifications.showToast('Project deleted', 'success')
+          this.router.navigate(['/projects'])
+        },
       })
   }
 }

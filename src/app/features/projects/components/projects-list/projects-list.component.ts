@@ -12,6 +12,7 @@ import {
 } from '../../../../core/models/project.model'
 import { Task } from '../../../../core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
+import { NotificationService } from '../../../../core/services/notification.service'
 import { finalize, forkJoin } from 'rxjs'
 
 type FilterStatus = 'all' | ProjectStatus
@@ -25,6 +26,7 @@ type FilterStatus = 'all' | ProjectStatus
 export class ProjectsListComponent implements OnInit {
   private readonly projectsService = inject(ProjectsService)
   private readonly tasksService = inject(TasksService)
+  private readonly notifications = inject(NotificationService)
   private readonly destroyRef = inject(DestroyRef)
 
   readonly projects = signal<Project[]>([])
@@ -107,6 +109,7 @@ export class ProjectsListComponent implements OnInit {
       .subscribe({
         next: (created: Project) => {
           this.projects.update((list) => [created, ...list])
+          this.notifications.showToast('Project created', 'success')
           this.closeForm()
         },
       })
