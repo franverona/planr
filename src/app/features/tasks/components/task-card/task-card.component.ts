@@ -23,4 +23,11 @@ export class TaskCardComponent {
         return 'bg-blue-100 text-blue-700'
     }
   }
+
+  deleteTask(): void {
+    const t = this.task()
+    if (!t || !confirm(`Delete task "${t.title}"? This cannot be undone.`)) return
+
+    this.deleted.emit(this.task().id)
+  }
 }
