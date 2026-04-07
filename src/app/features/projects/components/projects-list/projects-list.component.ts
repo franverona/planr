@@ -2,17 +2,17 @@ import { Component, inject, signal, computed, OnInit, DestroyRef } from '@angula
 import { CommonModule } from '@angular/common'
 import { RouterLink } from '@angular/router'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { ProjectsService } from '../../../../core/services/projects.service'
-import { TasksService } from '../../../../core/services/tasks.service'
+import { ProjectsService } from '@core/services/projects.service'
+import { TasksService } from '@core/services/tasks.service'
 import {
   Project,
   ProjectStatus,
   CreateProjectDto,
   UpdateProjectDto,
-} from '../../../../core/models/project.model'
-import { Task } from '../../../../core/models/task.model'
+} from '@core/models/project.model'
+import { Task } from '@core/models/task.model'
 import { ProjectFormComponent } from '../project-form/project-form.component'
-import { NotificationService } from '../../../../core/services/notification.service'
+import { NotificationService } from '@core/services/notification.service'
 import { finalize, forkJoin } from 'rxjs'
 
 type FilterStatus = 'all' | ProjectStatus
