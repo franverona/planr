@@ -9,7 +9,7 @@ import { NotificationService, ToastType } from '../../../core/services/notificat
 export class ToastComponent {
   readonly notifications = inject(NotificationService)
 
-  containerClass(type: ToastType): string {
+  containerClass(type: ToastType, dismissing: boolean): string {
     const base =
       'flex items-start gap-3 px-4 py-3 rounded-lg shadow-md text-sm font-medium w-80 border-l-4 bg-white'
     const colors: Record<ToastType, string> = {
@@ -18,6 +18,7 @@ export class ToastComponent {
       info: 'border-blue-500 text-blue-800',
       warning: 'border-amber-400 text-amber-800',
     }
-    return `${base} ${colors[type]}`
+    const animation = dismissing ? 'toast-leave' : 'toast-enter'
+    return `${base} ${colors[type]} ${animation}`
   }
 }
