@@ -59,7 +59,7 @@
     "tailwindcss": "^4.2.2",
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.58.0",
-    "wait-on": "^9.0.4"
+    "wait-on": "^9.0.5"
   },
   "lint-staged": {
     "*.{ts,html}": "eslint --fix",
